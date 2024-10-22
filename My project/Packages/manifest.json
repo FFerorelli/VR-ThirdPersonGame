@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.meta.xr.sdk.all": "69.0.0",
     "com.meta.xr.sdk.core": "69.0.0",
     "com.meta.xr.sdk.interaction.ovr": "69.0.1",
     "com.unity.collab-proxy": "2.5.2",
