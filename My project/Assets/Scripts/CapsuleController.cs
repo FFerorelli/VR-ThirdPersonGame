@@ -2,42 +2,38 @@ using UnityEngine;
 
 public class CapsuleController : MonoBehaviour
 {
-    // Movement speed of the capsule
-    public float moveSpeed = 2.0f;
+    public float moveSpeed = 5.0f;  // Base movement speed
+    public float jumpForce = 10.0f;  // Force applied when jumping
+    public Transform leftControllerTransform;  // Reference to the left controller's Transform
+    public LayerMask groundLayers;  // Layers considered as ground
+    public float groundCheckDistance = 0.5f;  // Distance to check for ground
 
-    // Jump force applied to the capsule
-    public float jumpForce = 5.0f;
-
-    // Reference to the VR camera (player's headset)
-    public Transform vrCamera;
-
-    // Ground check variables
-    public LayerMask groundLayers;
-    public float groundCheckDistance = 0.1f;
-
-    // Private variables
     private Rigidbody rb;
     private bool isGrounded;
-    private Vector2 input; // Input from joystick
+    private Vector2 input;  // Input from the left analog stick
 
     void Start()
     {
-        // Get the Rigidbody component attached to the capsule
+        // Get the Rigidbody component
         rb = GetComponent<Rigidbody>();
 
-        // Ensure the VR camera is assigned
-        if (vrCamera == null)
+        // Ensure the leftControllerTransform is assigned
+        if (leftControllerTransform == null)
         {
-            vrCamera = Camera.main.transform; // Try to find the main camera
+            Debug.LogError("Left Controller Transform is not assigned. Please assign it in the Inspector.");
         }
     }
 
     void Update()
     {
-        // Get movement input from the Unity Input Manager (default joystick mapping)
-        input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        // Get analog stick input from the left joystick
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
 
-        // Check for jump input and if the capsule is grounded
+        // Store the input vector
+        input = new Vector2(horizontalInput, verticalInput);
+
+        // Jump input
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             Jump();
@@ -55,27 +51,32 @@ public class CapsuleController : MonoBehaviour
 
     void HandleMovement()
     {
-        // Get the forward and right vectors relative to the VR camera
-        Vector3 forward = vrCamera.forward;
-        Vector3 right = vrCamera.right;
+        if (input.sqrMagnitude > 0.01f)  // Threshold to prevent jitter when the stick is near the center
+        {
+            // Create the input vector in local space
+            Vector3 localInput = new Vector3(input.x, 0f, input.y);
 
-        // Project forward and right vectors onto the horizontal plane (y = 0)
-        forward.y = 0f;
-        right.y = 0f;
-        forward.Normalize();
-        right.Normalize();
+            // Transform the input vector from local space to world space, based on the controller's orientation
+            Vector3 moveDirection = leftControllerTransform.TransformDirection(localInput);
 
-        // Calculate the desired movement direction
-        Vector3 desiredMoveDirection = (forward * input.y + right * input.x).normalized;
+            // Project moveDirection onto the horizontal plane (y = 0)
+            moveDirection.y = 0f;
+            moveDirection.Normalize();
 
-        // Move the capsule using Rigidbody
-        Vector3 movement = desiredMoveDirection * moveSpeed * Time.fixedDeltaTime;
-        rb.MovePosition(rb.position + movement);
+            // Scale movement based on input magnitude for smoother control
+            float inputMagnitude = input.magnitude;
+
+            // Calculate movement vector
+            Vector3 movement = moveDirection * moveSpeed * inputMagnitude * Time.fixedDeltaTime;
+
+            // Move the capsule using Rigidbody
+            rb.MovePosition(rb.position + movement);
+        }
     }
 
     void Jump()
     {
-        // Apply upward force to the capsule for jumping
+        // Apply upward force for jumping
         rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
     }
 
