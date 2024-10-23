@@ -4,7 +4,7 @@ public class CapsuleController : MonoBehaviour
 {
     public float moveSpeed = 5.0f;  // Base movement speed
     public float jumpForce = 10.0f;  // Force applied when jumping
-    public Transform leftControllerTransform;  // Reference to the left controller's Transform
+    public Transform vrCameraTransform;  // Reference to the VR camera (headset)
     public LayerMask groundLayers;  // Layers considered as ground
     public float groundCheckDistance = 0.5f;  // Distance to check for ground
 
@@ -17,10 +17,10 @@ public class CapsuleController : MonoBehaviour
         // Get the Rigidbody component
         rb = GetComponent<Rigidbody>();
 
-        // Ensure the leftControllerTransform is assigned
-        if (leftControllerTransform == null)
+        // Ensure the vrCameraTransform is assigned
+        if (vrCameraTransform == null)
         {
-            Debug.LogError("Left Controller Transform is not assigned. Please assign it in the Inspector.");
+            Debug.LogError("VR Camera Transform is not assigned. Please assign it in the Inspector.");
         }
     }
 
@@ -53,17 +53,25 @@ public class CapsuleController : MonoBehaviour
     {
         if (input.sqrMagnitude > 0.01f)  // Threshold to prevent jitter when the stick is near the center
         {
-            // Create the input vector in local space
+            // Create the input vector in local space (joystick direction)
             Vector3 localInput = new Vector3(input.x, 0f, input.y);
 
-            // Transform the input vector from local space to world space, based on the controller's orientation
-            Vector3 moveDirection = leftControllerTransform.TransformDirection(localInput);
+            // Use the VR camera's (headset's) forward direction for movement
+            Vector3 forward = vrCameraTransform.forward;
+            Vector3 right = vrCameraTransform.right;
 
-            // Project moveDirection onto the horizontal plane (y = 0)
-            moveDirection.y = 0f;
-            moveDirection.Normalize();
+            // Ignore vertical tilt (y-component)
+            forward.y = 0f;
+            right.y = 0f;
 
-            // Scale movement based on input magnitude for smoother control
+            // Normalize to keep the directions consistent
+            forward.Normalize();
+            right.Normalize();
+
+            // Calculate the movement direction based on the joystick input and headset direction
+            Vector3 moveDirection = (forward * localInput.z + right * localInput.x).normalized;
+
+            // Scale movement based on the joystick input magnitude
             float inputMagnitude = input.magnitude;
 
             // Calculate movement vector
