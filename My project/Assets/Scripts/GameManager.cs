@@ -10,10 +10,6 @@ public class GameManager : MonoBehaviour
     [Header("Game Settings")]
     public float gameTime = 60f; // Total time for the game in seconds
 
-    [Header("UI Elements")]
-    public TextMeshProUGUI scoreText; // Use TextMeshProUGUI
-    public TextMeshProUGUI timerText; // Use TextMeshProUGUI
-
     private int score = 0;
     private float timeRemaining;
     private bool isGameOver = false;
@@ -50,8 +46,6 @@ public class GameManager : MonoBehaviour
     {
         timeRemaining = gameTime;
         StartCoroutine(GameTimer());
-        UpdateScoreUI();
-        UpdateTimerUI();
     }
 
     IEnumerator GameTimer()
@@ -60,8 +54,7 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(1f);
             timeRemaining--;
-            OnTimeChanged.Invoke(timeRemaining);
-            UpdateTimerUI();
+            OnTimeChanged.Invoke(timeRemaining);  // Let the event update the timer UI
         }
 
         GameOver();
@@ -71,10 +64,9 @@ public class GameManager : MonoBehaviour
     {
         if (isGameOver)
             return;
-        Debug.Log("Score: " + score);
+
         score += amount;
-        OnScoreChanged.Invoke(score);
-        UpdateScoreUI();
+        OnScoreChanged.Invoke(score);  // Let the event update the score UI
     }
 
     void GameOver()
@@ -82,17 +74,5 @@ public class GameManager : MonoBehaviour
         isGameOver = true;
         OnGameOver.Invoke();
         // Additional game over logic (e.g., show Game Over screen)
-    }
-
-    void UpdateScoreUI()
-    {
-        if (scoreText != null)
-            scoreText.text = "Score: " + score;
-    }
-
-    void UpdateTimerUI()
-    {
-        if (timerText != null)
-            timerText.text = "Time: " + Mathf.Clamp(timeRemaining, 0, gameTime);
     }
 }

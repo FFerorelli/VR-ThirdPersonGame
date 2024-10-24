@@ -8,6 +8,7 @@ public class UIController : MonoBehaviour
 
     void OnEnable()
     {
+        
         GameManager.Instance.OnScoreChanged.AddListener(UpdateScore);
         GameManager.Instance.OnTimeChanged.AddListener(UpdateTimer);
         GameManager.Instance.OnGameOver.AddListener(HandleGameOver);
@@ -36,5 +37,6 @@ public class UIController : MonoBehaviour
     {
         // Show Game Over UI or perform other actions
         Debug.Log("Game Over");
+        // Here you can add logic to display a Game Over screen or freeze input
     }
 }

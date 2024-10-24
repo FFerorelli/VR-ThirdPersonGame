@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class CapsuleController : MonoBehaviour
 {
-    public float moveSpeed = 5.0f;  // Base movement speed
+    public float moveSpeed = 5.0f;  // Max movement speed
+    public float acceleration = 10.0f;  // How fast the capsule reaches max speed
+    public float deceleration = 8.0f;  // How fast the capsule slows down
     public float jumpForce = 10.0f;  // Force applied when jumping
     public Transform vrCameraTransform;  // Reference to the VR camera (headset)
     public LayerMask groundLayers;  // Layers considered as ground
@@ -11,6 +13,7 @@ public class CapsuleController : MonoBehaviour
     private Rigidbody rb;
     private bool isGrounded;
     private Vector2 input;  // Input from the left analog stick
+    private Vector3 currentVelocity;  // Track the current velocity
 
     void Start()
     {
@@ -45,12 +48,14 @@ public class CapsuleController : MonoBehaviour
         // Update grounded status
         isGrounded = CheckIfGrounded();
 
-        // Handle movement
+        // Handle movement with inertia and smoothing
         HandleMovement();
     }
 
     void HandleMovement()
     {
+        Vector3 desiredVelocity = Vector3.zero;
+
         if (input.sqrMagnitude > 0.01f)  // Threshold to prevent jitter when the stick is near the center
         {
             // Create the input vector in local space (joystick direction)
@@ -64,22 +69,23 @@ public class CapsuleController : MonoBehaviour
             forward.y = 0f;
             right.y = 0f;
 
-            // Normalize to keep the directions consistent
+            // Normalize directions
             forward.Normalize();
             right.Normalize();
 
             // Calculate the movement direction based on the joystick input and headset direction
             Vector3 moveDirection = (forward * localInput.z + right * localInput.x).normalized;
 
-            // Scale movement based on the joystick input magnitude
-            float inputMagnitude = input.magnitude;
-
-            // Calculate movement vector
-            Vector3 movement = moveDirection * moveSpeed * inputMagnitude * Time.fixedDeltaTime;
-
-            // Move the capsule using Rigidbody
-            rb.MovePosition(rb.position + movement);
+            // Calculate the desired velocity
+            desiredVelocity = moveDirection * moveSpeed;
         }
+
+        // Smoothly adjust velocity based on input
+        currentVelocity = Vector3.Lerp(currentVelocity, desiredVelocity,
+            (desiredVelocity.magnitude > 0) ? acceleration * Time.fixedDeltaTime : deceleration * Time.fixedDeltaTime);
+
+        // Move the capsule by applying the calculated velocity
+        rb.MovePosition(rb.position + currentVelocity * Time.fixedDeltaTime);
     }
 
     void Jump()
