@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CapsuleController : MonoBehaviour
 {
-    public float moveSpeed = 5.0f;  // Max movement speed
+    public float maxMoveSpeed = 5.0f;  // Max movement speed
     public float acceleration = 10.0f;  // How fast the capsule reaches max speed
     public float deceleration = 8.0f;  // How fast the capsule slows down
     public float jumpForce = 10.0f;  // Force applied when jumping
@@ -76,8 +76,9 @@ public class CapsuleController : MonoBehaviour
             // Calculate the movement direction based on the joystick input and headset direction
             Vector3 moveDirection = (forward * localInput.z + right * localInput.x).normalized;
 
-            // Calculate the desired velocity
-            desiredVelocity = moveDirection * moveSpeed;
+            // Scale the movement speed based on how much the analog stick is pressed
+            float inputMagnitude = input.magnitude;  // This gives a value between 0 and 1 based on stick input
+            desiredVelocity = moveDirection * maxMoveSpeed * inputMagnitude;  // Scale speed based on input magnitude
         }
 
         // Smoothly adjust velocity based on input
