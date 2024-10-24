@@ -147,6 +147,6 @@ public class GameManager : MonoBehaviour
             capsuleController.EnableMovement();
         }
 
-        Debug.Log("Game restarted.");
+        //Debug.Log("Game restarted.");
     }
 }

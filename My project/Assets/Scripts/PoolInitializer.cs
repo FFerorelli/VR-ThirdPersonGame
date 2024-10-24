@@ -27,6 +27,6 @@ public class PoolInitializer : MonoBehaviour
             ObjectPoolManager.Instance.AddToPool(obj);  // Add them to the pool and deactivate them
         }
 
-        Debug.Log("All spawned objects have been added to the pool.");
+        //Debug.Log("All spawned objects have been added to the pool.");
     }
 }

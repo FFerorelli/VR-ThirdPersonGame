@@ -45,12 +45,12 @@ public class ObjectPoolManager : MonoBehaviour
         if (inactiveObjects.Count > 0)
         {
             int randomIndex = Random.Range(0, inactiveObjects.Count);
-            Debug.Log($"Activating object: {inactiveObjects[randomIndex].name}");
+            //Debug.Log($"Activating object: {inactiveObjects[randomIndex].name}");
             return inactiveObjects[randomIndex];
         }
 
         // If no inactive objects are available, return null
-        Debug.LogWarning("No inactive objects available in pool.");
+        //Debug.LogWarning("No inactive objects available in pool.");
         return null;
     }
 
@@ -65,7 +65,7 @@ public class ObjectPoolManager : MonoBehaviour
             }
         }
 
-        Debug.Log("All active pooled objects have been deactivated.");
+        //Debug.Log("All active pooled objects have been deactivated.");
     }
 
     // Method to get the total count of pooled objects

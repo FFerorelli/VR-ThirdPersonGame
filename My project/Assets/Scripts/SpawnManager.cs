@@ -56,18 +56,18 @@ public class SpawnManager : MonoBehaviour
                 // Activate the object (it retains its original position from FindSpawnPositions)
                 pooledObject.SetActive(true);
                 activationCount++;  // Increment the number of activations
-                Debug.Log($"Activated object {pooledObject.name}, total activations: {activationCount}");
+                //Debug.Log($"Activated object {pooledObject.name}, total activations: {activationCount}");
             }
             else
             {
-                Debug.Log("No available objects in the pool.");
+                //Debug.Log("No available objects in the pool.");
             }
 
             // Wait for the next spawn interval
             yield return new WaitForSeconds(spawnInterval);
         }
 
-        Debug.Log("All objects in the pool have been activated or spawning has been stopped.");
+        //Debug.Log("All objects in the pool have been activated or spawning has been stopped.");
     }
 
     private void StopSpawning()

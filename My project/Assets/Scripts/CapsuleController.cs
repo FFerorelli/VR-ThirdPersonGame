@@ -20,10 +20,10 @@ public class CapsuleController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
-        if (vrCameraTransform == null)
-        {
-            Debug.LogError("VR Camera Transform is not assigned.");
-        }
+        //if (vrCameraTransform == null)
+        //{
+        //    Debug.LogError("VR Camera Transform is not assigned.");
+        //}
 
         // Subscribe to the GameOver event
         GameManager.Instance.OnGameOver.AddListener(DisableMovement);
