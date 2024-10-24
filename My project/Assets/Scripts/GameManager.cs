@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
 using TMPro;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,10 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverUI; // Reference to the Game Over UI
     public GameObject winUI; // Reference to the Win UI
 
+    [Header("References")]
+    public CapsuleController capsuleController;  // Reference to the CapsuleController
+    public Button restartButtonWinUI;  // Button in the Win UI
+    public Button restartButtonGameOverUI;  // Button in the Game Over UI
     private int score = 0;
     private float timeRemaining;
     private bool isGameOver = false;
@@ -26,7 +31,6 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        // Singleton pattern to ensure only one GameManager exists
         if (Instance == null)
         {
             Instance = this;
@@ -36,7 +40,6 @@ public class GameManager : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        // Initialize events
         if (OnScoreChanged == null)
             OnScoreChanged = new UnityEvent<int>();
 
@@ -49,25 +52,32 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        // Wait for the pool to be initialized before starting the game
+        // Hook the restart buttons to the RestartGame method
+        if (restartButtonWinUI != null)
+        {
+            restartButtonWinUI.onClick.AddListener(RestartGame);
+        }
+
+        if (restartButtonGameOverUI != null)
+        {
+            restartButtonGameOverUI.onClick.AddListener(RestartGame);
+        }
+
+       
         StartCoroutine(WaitForPoolInitialization());
     }
 
     private IEnumerator WaitForPoolInitialization()
     {
-        // Wait until the object pool has been populated
         while (ObjectPoolManager.Instance.GetTotalObjectCount() == 0)
         {
-            yield return null;  // Wait for one frame and recheck
+            yield return null;
         }
 
-        // Now the pool is populated, get the total object count
         totalObjectsToSpawn = ObjectPoolManager.Instance.GetTotalObjectCount();
-
         timeRemaining = gameTime;
         StartCoroutine(GameTimer());
 
-        // Deactivate the Game Over and Win UIs at the start
         if (gameOverUI != null) gameOverUI.SetActive(false);
         if (winUI != null) winUI.SetActive(false);
     }
@@ -78,10 +88,10 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(1f);
             timeRemaining--;
-            OnTimeChanged.Invoke(timeRemaining);  // Let the event update the timer UI
+            OnTimeChanged.Invoke(timeRemaining);
         }
 
-        if (!isGameOver) GameOver();  // Game ends if time runs out and the game isn't over yet
+        if (!isGameOver) GameOver();
     }
 
     public void AddScore(int amount)
@@ -90,9 +100,8 @@ public class GameManager : MonoBehaviour
             return;
 
         score += amount;
-        OnScoreChanged.Invoke(score);  // Let the event update the score UI
+        OnScoreChanged.Invoke(score);
 
-        // Check if the player has won the game
         if (score >= totalObjectsToSpawn)
         {
             WinGame();
@@ -104,12 +113,8 @@ public class GameManager : MonoBehaviour
         isGameOver = true;
         OnGameOver.Invoke();
 
-        // Activate Game Over UI
         if (gameOverUI != null)
             gameOverUI.SetActive(true);
-
-        // Additional game over logic (e.g., stop player movement)
-        Debug.Log("Game Over.");
     }
 
     void WinGame()
@@ -117,10 +122,31 @@ public class GameManager : MonoBehaviour
         isGameOver = true;
         OnGameOver.Invoke();
 
-        // Activate Win UI
         if (winUI != null)
             winUI.SetActive(true);
+    }
 
-        Debug.Log("You Win!");
+    public void RestartGame()
+    {
+        if (gameOverUI != null) gameOverUI.SetActive(false);
+        if (winUI != null) winUI.SetActive(false);
+
+        isGameOver = false;
+        score = 0;
+        timeRemaining = gameTime;
+
+        OnScoreChanged.Invoke(score);
+
+        ObjectPoolManager.Instance.DeactivateAllPooledObjects();
+        StartCoroutine(GameTimer());
+        SpawnManager.Instance.RestartSpawning();
+
+        // Re-enable capsule movement
+        if (capsuleController != null)
+        {
+            capsuleController.EnableMovement();
+        }
+
+        Debug.Log("Game restarted.");
     }
 }

@@ -3,10 +3,24 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
+    public static SpawnManager Instance;
+
     [SerializeField] private float spawnInterval = 1f;  // Time between each spawn
     private int activationCount = 0;  // Number of activations
     private int totalObjectsInPool;  // Total number of objects in the pool
     private bool canSpawn = true;  // Control whether objects can be spawned
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
 
     private void Start()
     {
@@ -59,5 +73,13 @@ public class SpawnManager : MonoBehaviour
     private void StopSpawning()
     {
         canSpawn = false;
+    }
+
+    // New method to restart spawning
+    public void RestartSpawning()
+    {
+        canSpawn = true;
+        activationCount = 0;  // Reset activation count
+        StartCoroutine(ActivateObjectsFromPoolRoutine());  // Restart the spawn process
     }
 }

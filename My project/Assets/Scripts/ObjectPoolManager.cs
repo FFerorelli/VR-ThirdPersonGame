@@ -25,7 +25,6 @@ public class ObjectPoolManager : MonoBehaviour
     {
         obj.SetActive(false);  // Deactivate the object when adding to the pool
         pooledObjects.Add(obj);
-        Debug.Log($"Object {obj.name} added to pool.");
     }
 
     // Get a random inactive object from the pool
@@ -55,17 +54,23 @@ public class ObjectPoolManager : MonoBehaviour
         return null;
     }
 
-    // Return an object to the pool (deactivate it)
-    public void ReturnToPool(GameObject obj)
+    // Method to deactivate all active pooled objects
+    public void DeactivateAllPooledObjects()
     {
-        obj.SetActive(false);  // Deactivate the object and return it to the pool
-        Debug.Log($"Object {obj.name} returned to pool.");
+        foreach (GameObject obj in pooledObjects)
+        {
+            if (obj.activeInHierarchy)
+            {
+                obj.SetActive(false);
+            }
+        }
+
+        Debug.Log("All active pooled objects have been deactivated.");
     }
 
-    // Get the total number of objects in the pool
+    // Method to get the total count of pooled objects
     public int GetTotalObjectCount()
     {
-        Debug.Log($"Total objects in pool: {pooledObjects.Count}");
         return pooledObjects.Count;
     }
 }

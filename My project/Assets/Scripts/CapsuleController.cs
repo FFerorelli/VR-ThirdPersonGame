@@ -2,41 +2,51 @@ using UnityEngine;
 
 public class CapsuleController : MonoBehaviour
 {
-    public float maxMoveSpeed = 5.0f;  // Max movement speed
-    public float acceleration = 10.0f;  // How fast the capsule reaches max speed
-    public float deceleration = 8.0f;  // How fast the capsule slows down
-    public float jumpForce = 10.0f;  // Force applied when jumping
-    public Transform vrCameraTransform;  // Reference to the VR camera (headset)
-    public LayerMask groundLayers;  // Layers considered as ground
-    public float groundCheckDistance = 0.5f;  // Distance to check for ground
+    public float moveSpeed = 5.0f;
+    public float acceleration = 10.0f;
+    public float deceleration = 8.0f;
+    public float jumpForce = 10.0f;
+    public Transform vrCameraTransform;
+    public LayerMask groundLayers;
+    public float groundCheckDistance = 0.5f;
 
     private Rigidbody rb;
     private bool isGrounded;
-    private Vector2 input;  // Input from the left analog stick
-    private Vector3 currentVelocity;  // Track the current velocity
+    private Vector2 input;
+    private Vector3 currentVelocity;
+    private bool canMove = true;  // Control whether movement is allowed
 
     void Start()
     {
-        // Get the Rigidbody component
         rb = GetComponent<Rigidbody>();
 
-        // Ensure the vrCameraTransform is assigned
         if (vrCameraTransform == null)
         {
-            Debug.LogError("VR Camera Transform is not assigned. Please assign it in the Inspector.");
+            Debug.LogError("VR Camera Transform is not assigned.");
+        }
+
+        // Subscribe to the GameOver event
+        GameManager.Instance.OnGameOver.AddListener(DisableMovement);
+    }
+
+    void OnDestroy()
+    {
+        // Unsubscribe from the GameOver event to avoid potential memory leaks
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnGameOver.RemoveListener(DisableMovement);
         }
     }
 
     void Update()
     {
-        // Get analog stick input from the left joystick
+        if (!canMove) return;  // Prevent movement if movement is disabled
+
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        // Store the input vector
         input = new Vector2(horizontalInput, verticalInput);
 
-        // Jump input
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             Jump();
@@ -45,10 +55,9 @@ public class CapsuleController : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Update grounded status
-        isGrounded = CheckIfGrounded();
+        if (!canMove) return;  // Prevent movement if movement is disabled
 
-        // Handle movement with inertia and smoothing
+        isGrounded = CheckIfGrounded();
         HandleMovement();
     }
 
@@ -56,48 +65,47 @@ public class CapsuleController : MonoBehaviour
     {
         Vector3 desiredVelocity = Vector3.zero;
 
-        if (input.sqrMagnitude > 0.01f)  // Threshold to prevent jitter when the stick is near the center
+        if (input.sqrMagnitude > 0.01f)
         {
-            // Create the input vector in local space (joystick direction)
             Vector3 localInput = new Vector3(input.x, 0f, input.y);
-
-            // Use the VR camera's (headset's) forward direction for movement
             Vector3 forward = vrCameraTransform.forward;
             Vector3 right = vrCameraTransform.right;
 
-            // Ignore vertical tilt (y-component)
             forward.y = 0f;
             right.y = 0f;
-
-            // Normalize directions
             forward.Normalize();
             right.Normalize();
 
-            // Calculate the movement direction based on the joystick input and headset direction
             Vector3 moveDirection = (forward * localInput.z + right * localInput.x).normalized;
-
-            // Scale the movement speed based on how much the analog stick is pressed
-            float inputMagnitude = input.magnitude;  // This gives a value between 0 and 1 based on stick input
-            desiredVelocity = moveDirection * maxMoveSpeed * inputMagnitude;  // Scale speed based on input magnitude
+            float inputMagnitude = input.magnitude;
+            desiredVelocity = moveDirection * moveSpeed * inputMagnitude;
         }
 
-        // Smoothly adjust velocity based on input
         currentVelocity = Vector3.Lerp(currentVelocity, desiredVelocity,
             (desiredVelocity.magnitude > 0) ? acceleration * Time.fixedDeltaTime : deceleration * Time.fixedDeltaTime);
 
-        // Move the capsule by applying the calculated velocity
         rb.MovePosition(rb.position + currentVelocity * Time.fixedDeltaTime);
     }
 
     void Jump()
     {
-        // Apply upward force for jumping
         rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
     }
 
     bool CheckIfGrounded()
     {
-        // Raycast down to check if the capsule is grounded
         return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayers);
+    }
+
+    // Disable movement when the game is over
+    public void DisableMovement()
+    {
+        canMove = false;
+    }
+
+    // Enable movement when the game restarts (optional if needed)
+    public void EnableMovement()
+    {
+        canMove = true;
     }
 }

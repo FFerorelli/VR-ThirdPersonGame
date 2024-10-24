@@ -4623,9 +4623,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56e035e545c0cbd48aed2d9489c6845a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameTime: 5
+  gameTime: 15
   gameOverUI: {fileID: 471572992}
   winUI: {fileID: 890959716}
+  capsuleController: {fileID: 695929976}
+  restartButtonWinUI: {fileID: 1745134257}
+  restartButtonGameOverUI: {fileID: 1432381139}
   OnScoreChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -5303,7 +5306,8 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2642893851062507661, guid: fa2248d72b5e7534eb119d34056e3e24, type: 3}
     m_RemovedGameObjects:
     - {fileID: 2077951339571833193, guid: fa2248d72b5e7534eb119d34056e3e24, type: 3}
     - {fileID: 2089309879159258660, guid: fa2248d72b5e7534eb119d34056e3e24, type: 3}
@@ -6884,6 +6888,18 @@ Transform:
   - {fileID: 1529524499}
   m_Father: {fileID: 240351333}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &695929976 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7318080743499551570, guid: 5847e91e3639e734a90951da88313054,
+    type: 3}
+  m_PrefabInstance: {fileID: 4047230844461403748}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d767d290e4921a43b9ec008a6c467ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &696376874
 GameObject:
   m_ObjectHideFlags: 0
@@ -8812,7 +8828,8 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2642893851062507661, guid: fa2248d72b5e7534eb119d34056e3e24, type: 3}
     m_RemovedGameObjects:
     - {fileID: 2077951339571833193, guid: fa2248d72b5e7534eb119d34056e3e24, type: 3}
     - {fileID: 2089309879159258660, guid: fa2248d72b5e7534eb119d34056e3e24, type: 3}
@@ -11451,7 +11468,7 @@ MonoBehaviour:
   SpawnOnStart: 1
   SpawnObject: {fileID: 384416536625652182, guid: c99b7906318a3d243b5f6a5d3c4ef570,
     type: 3}
-  SpawnAmount: 2
+  SpawnAmount: 10
   MaxIterations: 1000
   SpawnLocations: 3
   Labels: 537
@@ -15926,7 +15943,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1942838282
 Transform:
   m_ObjectHideFlags: 0
@@ -15936,7 +15953,7 @@ Transform:
   m_GameObject: {fileID: 1942838281}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.328}
+  m_LocalPosition: {x: 0, y: -0.108, z: 0.328}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
