@@ -5,33 +5,34 @@ public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private float spawnInterval = 1f;  // Time between each spawn
     private int activationCount = 0;  // Number of activations
-    private int totalObjectsInPool = 0;  // Total number of objects in the pool
+    private int totalObjectsInPool;  // Total number of objects in the pool
+    private bool canSpawn = true;  // Control whether objects can be spawned
 
     private void Start()
     {
-        // Start the coroutine to gradually activate objects from the pool
-        StartCoroutine(WaitForPoolToInitialize());
+        // Subscribe to the GameOver event from GameManager
+        GameManager.Instance.OnGameOver.AddListener(StopSpawning);
+
+        // Wait for the pool to be initialized before starting spawning
+        StartCoroutine(WaitForPoolInitialization());
     }
 
-    private IEnumerator WaitForPoolToInitialize()
+    private IEnumerator WaitForPoolInitialization()
     {
-        // Wait until objects have been added to the pool
+        // Wait until the object pool has been populated
         while (ObjectPoolManager.Instance.GetTotalObjectCount() == 0)
         {
-            yield return null;  // Wait for the pool to be populated
+            yield return null;  // Wait for one frame and recheck
         }
 
-        // Once the pool is initialized, get the total object count
+        // Get the total number of objects in the pool
         totalObjectsInPool = ObjectPoolManager.Instance.GetTotalObjectCount();
-        Debug.Log($"Total objects in pool: {totalObjectsInPool}");
-
-        // Now start the activation coroutine
         StartCoroutine(ActivateObjectsFromPoolRoutine());
     }
 
     private IEnumerator ActivateObjectsFromPoolRoutine()
     {
-        while (activationCount < totalObjectsInPool)  // Activate objects until the limit is reached
+        while (activationCount < totalObjectsInPool && canSpawn)  // Check if we have activated fewer than the total objects
         {
             // Get a random inactive object from the pool
             GameObject pooledObject = ObjectPoolManager.Instance.GetRandomPooledObject();
@@ -52,6 +53,11 @@ public class SpawnManager : MonoBehaviour
             yield return new WaitForSeconds(spawnInterval);
         }
 
-        Debug.Log("All objects in the pool have been activated.");
+        Debug.Log("All objects in the pool have been activated or spawning has been stopped.");
+    }
+
+    private void StopSpawning()
+    {
+        canSpawn = false;
     }
 }

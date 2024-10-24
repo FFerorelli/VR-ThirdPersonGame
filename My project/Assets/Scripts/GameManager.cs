@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
-using TMPro; // Add this namespace
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,6 +9,11 @@ public class GameManager : MonoBehaviour
 
     [Header("Game Settings")]
     public float gameTime = 60f; // Total time for the game in seconds
+    private int totalObjectsToSpawn; // Total number of objects in the game
+
+    [Header("UI Elements")]
+    public GameObject gameOverUI; // Reference to the Game Over UI
+    public GameObject winUI; // Reference to the Win UI
 
     private int score = 0;
     private float timeRemaining;
@@ -44,8 +49,27 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        // Wait for the pool to be initialized before starting the game
+        StartCoroutine(WaitForPoolInitialization());
+    }
+
+    private IEnumerator WaitForPoolInitialization()
+    {
+        // Wait until the object pool has been populated
+        while (ObjectPoolManager.Instance.GetTotalObjectCount() == 0)
+        {
+            yield return null;  // Wait for one frame and recheck
+        }
+
+        // Now the pool is populated, get the total object count
+        totalObjectsToSpawn = ObjectPoolManager.Instance.GetTotalObjectCount();
+
         timeRemaining = gameTime;
         StartCoroutine(GameTimer());
+
+        // Deactivate the Game Over and Win UIs at the start
+        if (gameOverUI != null) gameOverUI.SetActive(false);
+        if (winUI != null) winUI.SetActive(false);
     }
 
     IEnumerator GameTimer()
@@ -57,7 +81,7 @@ public class GameManager : MonoBehaviour
             OnTimeChanged.Invoke(timeRemaining);  // Let the event update the timer UI
         }
 
-        GameOver();
+        if (!isGameOver) GameOver();  // Game ends if time runs out and the game isn't over yet
     }
 
     public void AddScore(int amount)
@@ -67,12 +91,36 @@ public class GameManager : MonoBehaviour
 
         score += amount;
         OnScoreChanged.Invoke(score);  // Let the event update the score UI
+
+        // Check if the player has won the game
+        if (score >= totalObjectsToSpawn)
+        {
+            WinGame();
+        }
     }
 
     void GameOver()
     {
         isGameOver = true;
         OnGameOver.Invoke();
-        // Additional game over logic (e.g., show Game Over screen)
+
+        // Activate Game Over UI
+        if (gameOverUI != null)
+            gameOverUI.SetActive(true);
+
+        // Additional game over logic (e.g., stop player movement)
+        Debug.Log("Game Over.");
+    }
+
+    void WinGame()
+    {
+        isGameOver = true;
+        OnGameOver.Invoke();
+
+        // Activate Win UI
+        if (winUI != null)
+            winUI.SetActive(true);
+
+        Debug.Log("You Win!");
     }
 }

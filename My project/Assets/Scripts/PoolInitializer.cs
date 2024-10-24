@@ -4,7 +4,7 @@ using System.Collections;
 public class PoolInitializer : MonoBehaviour
 {
     [SerializeField] private string objectTag = "Collectible";  // Tag for spawned objects
-    private int expectedObjectCount = 40;  // Number of objects FindSpawnPositions should spawn
+    private int expectedObjectCount = 2;  // Number of objects FindSpawnPositions should spawn
 
     private void Start()
     {
