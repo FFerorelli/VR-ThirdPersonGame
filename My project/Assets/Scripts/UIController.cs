@@ -24,13 +24,13 @@ public class UIController : MonoBehaviour
     void UpdateScore(int newScore)
     {
         if (scoreText != null)
-            scoreText.text = "Score: " + newScore;
+            scoreText.text = newScore.ToString();
     }
 
     void UpdateTimer(float timeRemaining)
     {
         if (timerText != null)
-            timerText.text = "Time: " + Mathf.Clamp(timeRemaining, 0, Mathf.Infinity);
+            timerText.text = Mathf.Clamp(timeRemaining, 0, Mathf.Infinity).ToString();
     }
 
     void HandleGameOver()
