@@ -4605,7 +4605,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56e035e545c0cbd48aed2d9489c6845a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameTime: 20
+  gameTime: 60
   gameOverUI: {fileID: 471572992}
   winUI: {fileID: 890959716}
   capsuleController: {fileID: 695929976}
@@ -11711,7 +11711,7 @@ MonoBehaviour:
   SpawnOnStart: 1
   SpawnObject: {fileID: 384416536625652182, guid: c99b7906318a3d243b5f6a5d3c4ef570,
     type: 3}
-  SpawnAmount: 10
+  SpawnAmount: 40
   MaxIterations: 1000
   SpawnLocations: 3
   Labels: 537
@@ -11748,7 +11748,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edc97717c92375449be1a078af3dbc28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnInterval: 1
+  spawnInterval: 0.75
 --- !u!114 &1275016631
 MonoBehaviour:
   m_ObjectHideFlags: 0
