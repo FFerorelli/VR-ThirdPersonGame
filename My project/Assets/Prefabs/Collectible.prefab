@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7941037719169686816}
   - component: {fileID: 4023718496770230626}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: Collectible
   m_TagString: Collectible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -119,3 +119,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreValue: 1
+  collectSound: {fileID: 8300000, guid: 6c18a0be00044467c876b970329857d9, type: 3}
