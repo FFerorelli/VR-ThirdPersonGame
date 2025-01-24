@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1455995502722692562}
   - component: {fileID: 3845380201709356378}
   - component: {fileID: 4958519138595859215}
+  - component: {fileID: -7738691861775491175}
   m_Layer: 0
   m_Name: Portal2
   m_TagString: Untagged
@@ -107,3 +108,20 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-7738691861775491175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184775054986061577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 490079b9a37fccc4aaf32ab240c97d64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  otherPortal: {fileID: 9056613104050458344, guid: 87daabcee56ab2a439bfc4d3a512ebd2,
+    type: 3}
+  attractionSpeed: 5
+  exitKickForce: 10
+  regainControlDelay: 0.5

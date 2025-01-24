@@ -24,12 +24,14 @@ public class PortalManager : MonoBehaviour
         // Instantiate both portals once, keep them disabled
         if (portalPrefabLeft != null)
         {
-            activePortalLeft = Instantiate(portalPrefabLeft);
+            //activePortalLeft = Instantiate(portalPrefabLeft);
+            activePortalLeft = portalPrefabLeft;
             activePortalLeft.SetActive(false);
         }
         if (portalPrefabRight != null)
         {
-            activePortalRight = Instantiate(portalPrefabRight);
+            //activePortalRight = Instantiate(portalPrefabRight);
+            activePortalRight = portalPrefabRight;
             activePortalRight.SetActive(false);
         }
     }

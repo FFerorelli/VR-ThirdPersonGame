@@ -14,7 +14,7 @@ public class CapsuleController : MonoBehaviour
     private bool isGrounded;
     private Vector2 input;
     private Vector3 currentVelocity;
-    private bool canMove = true;  // Control whether movement is allowed
+    public bool canMove = true;  // Control whether movement is allowed
 
     void Start()
     {
