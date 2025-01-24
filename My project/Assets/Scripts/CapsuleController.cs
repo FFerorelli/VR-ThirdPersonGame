@@ -25,17 +25,20 @@ public class CapsuleController : MonoBehaviour
         //    Debug.LogError("VR Camera Transform is not assigned.");
         //}
 
+
+        //-------------------------------- ACTIVATE GAME MANAGER----------------------------------
         // Subscribe to the GameOver event
-        GameManager.Instance.OnGameOver.AddListener(DisableMovement);
+       // GameManager.Instance.OnGameOver.AddListener(DisableMovement);
     }
 
     void OnDestroy()
     {
+        //-------------------------------- ACTIVATE GAME MANAGER----------------------------------
         // Unsubscribe from the GameOver event to avoid potential memory leaks
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.OnGameOver.RemoveListener(DisableMovement);
-        }
+        //if (GameManager.Instance != null)
+        //{
+        //    GameManager.Instance.OnGameOver.RemoveListener(DisableMovement);
+        //}
     }
 
     void Update()
