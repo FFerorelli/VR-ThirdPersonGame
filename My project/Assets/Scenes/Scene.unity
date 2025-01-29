@@ -2543,14 +2543,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2f2dc2140657c64481921c38f02eaae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  portalPrefab: {fileID: 184775054986061577, guid: 87daabcee56ab2a439bfc4d3a512ebd2,
-    type: 3}
-  maxRayDistance: 100
-  portalOffset: 0
-  wallLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  leftControllerTransform: {fileID: 522395959}
 --- !u!1 &149968459
 GameObject:
   m_ObjectHideFlags: 0
@@ -5820,6 +5812,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Portal1
       objectReference: {fileID: 0}
+    - target: {fileID: 184775054986061577, guid: 87daabcee56ab2a439bfc4d3a512ebd2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4881638605408871032, guid: 87daabcee56ab2a439bfc4d3a512ebd2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5877,6 +5874,21 @@ PrefabInstance:
       objectReference: {fileID: 1003907816}
     - target: {fileID: 9056613104050458344, guid: 87daabcee56ab2a439bfc4d3a512ebd2,
         type: 3}
+      propertyPath: exitKickForce
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056613104050458344, guid: 87daabcee56ab2a439bfc4d3a512ebd2,
+        type: 3}
+      propertyPath: attractionForce
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056613104050458344, guid: 87daabcee56ab2a439bfc4d3a512ebd2,
+        type: 3}
+      propertyPath: attractionRadius
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056613104050458344, guid: 87daabcee56ab2a439bfc4d3a512ebd2,
+        type: 3}
       propertyPath: capsuleTransform
       value: 
       objectReference: {fileID: 4047230844461403750}
@@ -5885,6 +5897,21 @@ PrefabInstance:
       propertyPath: capsuleController
       value: 
       objectReference: {fileID: 695929976}
+    - target: {fileID: 9056613104050458344, guid: 87daabcee56ab2a439bfc4d3a512ebd2,
+        type: 3}
+      propertyPath: regainControlDelay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056613104050458344, guid: 87daabcee56ab2a439bfc4d3a512ebd2,
+        type: 3}
+      propertyPath: portalAttractionCooldown
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056613104050458344, guid: 87daabcee56ab2a439bfc4d3a512ebd2,
+        type: 3}
+      propertyPath: teleportDistanceThreshold
+      value: 0.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5896,12 +5923,18 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 522642846}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 523582591}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 490079b9a37fccc4aaf32ab240c97d64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &523582591 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 184775054986061577, guid: 87daabcee56ab2a439bfc4d3a512ebd2,
+    type: 3}
+  m_PrefabInstance: {fileID: 522642846}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &527534430
 GameObject:
   m_ObjectHideFlags: 0
@@ -9970,10 +10003,55 @@ PrefabInstance:
       propertyPath: otherPortal
       value: 
       objectReference: {fileID: 522642847}
+    - target: {fileID: -7738691861775491175, guid: 631b438ee989e2b40bf0f3602d6749b2,
+        type: 3}
+      propertyPath: exitKickForce
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -7738691861775491175, guid: 631b438ee989e2b40bf0f3602d6749b2,
+        type: 3}
+      propertyPath: attractionForce
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: -7738691861775491175, guid: 631b438ee989e2b40bf0f3602d6749b2,
+        type: 3}
+      propertyPath: attractionRadius
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -7738691861775491175, guid: 631b438ee989e2b40bf0f3602d6749b2,
+        type: 3}
+      propertyPath: capsuleTransform
+      value: 
+      objectReference: {fileID: 4047230844461403750}
+    - target: {fileID: -7738691861775491175, guid: 631b438ee989e2b40bf0f3602d6749b2,
+        type: 3}
+      propertyPath: capsuleController
+      value: 
+      objectReference: {fileID: 695929976}
+    - target: {fileID: -7738691861775491175, guid: 631b438ee989e2b40bf0f3602d6749b2,
+        type: 3}
+      propertyPath: regainControlDelay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7738691861775491175, guid: 631b438ee989e2b40bf0f3602d6749b2,
+        type: 3}
+      propertyPath: portalAttractionCooldown
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7738691861775491175, guid: 631b438ee989e2b40bf0f3602d6749b2,
+        type: 3}
+      propertyPath: teleportDistanceThreshold
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 184775054986061577, guid: 631b438ee989e2b40bf0f3602d6749b2,
         type: 3}
       propertyPath: m_Name
       value: Portal2
+      objectReference: {fileID: 0}
+    - target: {fileID: 184775054986061577, guid: 631b438ee989e2b40bf0f3602d6749b2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4881638605408871032, guid: 631b438ee989e2b40bf0f3602d6749b2,
         type: 3}
@@ -10036,7 +10114,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1003907815}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1785028996}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 490079b9a37fccc4aaf32ab240c97d64, type: 3}
@@ -14323,17 +14401,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2987cd80f44944c418492e068b5ccf34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  portalPrefabLeft: {fileID: 184775054986061577, guid: 87daabcee56ab2a439bfc4d3a512ebd2,
-    type: 3}
-  portalPrefabRight: {fileID: 184775054986061577, guid: 631b438ee989e2b40bf0f3602d6749b2,
-    type: 3}
+  portalPrefabLeft: {fileID: 523582591}
+  portalPrefabRight: {fileID: 1785028996}
   leftControllerTransform: {fileID: 522395959}
   rightControllerTransform: {fileID: 1983620364}
   maxRayDistance: 50
   portalOffset: 0
   wallLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 72
 --- !u!1 &1586819362
 GameObject:
   m_ObjectHideFlags: 0
@@ -15867,6 +15943,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1581212616}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1785028996 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 184775054986061577, guid: 631b438ee989e2b40bf0f3602d6749b2,
+    type: 3}
+  m_PrefabInstance: {fileID: 1003907815}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1785080983
 GameObject:
   m_ObjectHideFlags: 0
